@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Map {
+class Map {
     protected int width;
     protected int height;
     protected int[][] map;

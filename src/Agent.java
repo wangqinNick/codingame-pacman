@@ -1,8 +1,7 @@
-import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Agent {
+class Agent {
     protected Scanner in;
     protected State state;
 
@@ -51,9 +50,10 @@ public class Agent {
             int speedTurnsLeft = in.nextInt(); // unused in wood leagues
             int abilityCoolDown = in.nextInt(); // unused in wood leagues
             // int x, int y, int pacId, Point point, String typeId, int speedTurnsLeft, int abilityCoolDown
-            Pacman pacman = new Pacman(i, new Point(x, y), pacId, typeId, speedTurnsLeft, abilityCoolDown);
+            Pacman pacman = new Pacman(new Point(x, y), pacId, typeId, speedTurnsLeft, abilityCoolDown);
+
             if (mine) myPacManArrayList.add(pacman);
-            else opponentPacManArrayList.add(pacman);
+            else  opponentPacManArrayList.add(pacman);
         }
         ChessPlayer myPlayer = new ChessPlayer(myPlayerScore, myPacManArrayList);
         ChessPlayer opponent = new ChessPlayer(opponentScore, opponentPacManArrayList);
@@ -77,14 +77,10 @@ public class Agent {
         /* End read pallets */
     }
 
-    public void print() {
-        bestTurn.print(state);
-    }
     public void think() {
-        for (Pacman pacman: state.players[0].pacmanArrayList) {
-            Pallet closestPallet = state.getClosestPallet(pacman.point);
-            if (closestPallet == null) System.out.println("MOVE 0 1 10"); //dummy command
-            else System.out.printf("MOVE 0 %d %d%n", closestPallet.point.x, closestPallet.point.y);
-        }
+        Pacman myPacman = state.players[0].pacmanArrayList.get(0);
+        Pallet closestPallet = state.getClosestPallet(myPacman.point);
+        if (closestPallet == null) System.out.println("MOVE 0 1 10"); //dummy command
+        else System.out.printf("MOVE 0 %d %d%n", closestPallet.point.x, closestPallet.point.y);
     }
 }

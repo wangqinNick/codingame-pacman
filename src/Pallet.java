@@ -1,4 +1,4 @@
-public class Pallet {
+class Pallet {
     protected int value;
     protected Point point;
 

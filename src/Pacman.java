@@ -1,13 +1,11 @@
-public class Pacman {
-    protected int index;
+class Pacman {
     protected Point point;
     protected int pacId;
     protected String typeId;
     protected int speedTurnsLeft;
     protected int abilityCoolDown;
 
-    public Pacman(int index, Point point, int pacId, String typeId, int speedTurnsLeft, int abilityCoolDown) {
-        this.index = index;
+    public Pacman(Point point, int pacId, String typeId, int speedTurnsLeft, int abilityCoolDown) {
         this.point = point;
         this.pacId = pacId;
         this.typeId = typeId;
