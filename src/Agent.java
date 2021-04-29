@@ -77,6 +77,9 @@ public class Agent {
         /* End read pallets */
     }
 
+    public void print() {
+        bestTurn.print(state);
+    }
     public void think() {
         for (Pacman pacman: state.players[0].pacmanArrayList) {
             Pallet closestPallet = state.getClosestPallet(pacman.point);

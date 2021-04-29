@@ -4,20 +4,21 @@ public class State {
     protected ChessPlayer [] players;
     protected Map map;
     protected ArrayList<Pallet> pallets;
-    protected ArrayList<Pacman> pacmanArrayList;
+
+    protected Graph graph;
 
     public State() {
-        this.players = new ChessPlayer[2];
-        this.map = new Map();
-        this.pallets = new ArrayList<>();
-        this.pacmanArrayList = new ArrayList<>();
+        players = new ChessPlayer[2];
+        map = new Map();
+        pallets = new ArrayList<>();
+        graph = new Graph();
     }
 
-    public State(Map map) {
-        this.players = new ChessPlayer[2];
+    public State(Map map, Graph graph) {
+        players = new ChessPlayer[2];
         this.map = map;
-        this.pallets = new ArrayList<>();
-        this.pacmanArrayList = new ArrayList<>();
+        pallets = new ArrayList<>();
+        this.graph = graph;
     }
 
     public Pallet getClosestPallet(Point pacmanPoint) {
@@ -34,5 +35,14 @@ public class State {
             }
         }
         return closestPallet;
+    }
+
+    public ArrayList<Pallet> getSuperPallets() {
+        ArrayList<Pallet> superPallets = new ArrayList<>();
+        for (Pallet pallet: pallets) {
+            if (pallet.value != 10) continue;
+            superPallets.add(pallet);
+        }
+        return superPallets;
     }
 }
