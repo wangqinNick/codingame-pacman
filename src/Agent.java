@@ -1,3 +1,4 @@
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -29,6 +30,10 @@ public class Agent {
     }
 
     public void readTurnInfo() {
+        /* Refresh the state */
+        Map prevMap = this.state.map;
+        this.state = new State(prevMap);
+
         /* Read player */
         int myPlayerScore = in.nextInt();
         int opponentScore = in.nextInt();
@@ -46,10 +51,9 @@ public class Agent {
             int speedTurnsLeft = in.nextInt(); // unused in wood leagues
             int abilityCoolDown = in.nextInt(); // unused in wood leagues
             // int x, int y, int pacId, Point point, String typeId, int speedTurnsLeft, int abilityCoolDown
-            Pacman pacman = new Pacman(x, y, pacId, typeId, speedTurnsLeft, abilityCoolDown);
-
+            Pacman pacman = new Pacman(i, new Point(x, y), pacId, typeId, speedTurnsLeft, abilityCoolDown);
             if (mine) myPacManArrayList.add(pacman);
-            else  opponentPacManArrayList.add(pacman);
+            else opponentPacManArrayList.add(pacman);
         }
         ChessPlayer myPlayer = new ChessPlayer(myPlayerScore, myPacManArrayList);
         ChessPlayer opponent = new ChessPlayer(opponentScore, opponentPacManArrayList);
@@ -60,16 +64,24 @@ public class Agent {
 
         /* Start read pallets */
         int visiblePelletCount = in.nextInt(); // all pellets in sight
+        Pallet pallet;
         for (int i = 0; i < visiblePelletCount; i++) {
             int x = in.nextInt();
             int y = in.nextInt();
             int value = in.nextInt(); // amount of points this pellet is worth
             state.map.updatePallets(x, y, value);
+
+            pallet = new Pallet(value, new Point(x, y));
+            state.pallets.add(pallet);
         }
         /* End read pallets */
     }
 
     public void think() {
-        System.out.println("MOVE 0 1 10");
+        for (Pacman pacman: state.players[0].pacmanArrayList) {
+            Pallet closestPallet = state.getClosestPallet(pacman.point);
+            if (closestPallet == null) System.out.println("MOVE 0 1 10"); //dummy command
+            else System.out.printf("MOVE 0 %d %d%n", closestPallet.point.x, closestPallet.point.y);
+        }
     }
 }
