@@ -37,4 +37,8 @@ class Map {
     public void updatePallets(int x, int y, int value) {
         map[y][x] = value;
     }
+
+    public int generateKey(Point point){
+        return point.x + point.y * width;
+    }
 }
