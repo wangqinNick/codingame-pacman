@@ -8,6 +8,7 @@ class Player {
         while (true) {
             agent.readTurnInfo();
             agent.think();
+            agent.print();
         }
     }
 }

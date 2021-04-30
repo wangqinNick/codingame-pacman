@@ -13,7 +13,7 @@ public class Action {
         Pacman pacman = state.players[0].pacmanArrayList.get(pacmanIndex);
         switch (actionType) {
             case MOVE:
-                System.out.printf("MOVE %d %d %d|", pacman.pacId, destination.x, destination.y);
+                System.out.printf("MOVE %d %d %d", pacman.pacId, destination.x, destination.y);
             default:
                 break;
         }

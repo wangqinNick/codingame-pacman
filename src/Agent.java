@@ -4,10 +4,12 @@ import java.util.Scanner;
 class Agent {
     protected Scanner in;
     protected State state;
+    protected Turn bestTurn;
 
     public Agent() {
         in = new Scanner(System.in);
         state = new State();
+        bestTurn = new Turn();
     }
 
     public void readMap() {
@@ -77,10 +79,21 @@ class Agent {
         /* End read pallets */
     }
 
+    public void print() {
+        bestTurn.print(state);
+    }
+
     public void think() {
+        bestTurn.clear();
+        Action action = new Action();
         Pacman myPacman = state.players[0].pacmanArrayList.get(0);
         Pallet closestPallet = state.getClosestPallet(myPacman.point);
-        if (closestPallet == null) System.out.println("MOVE 0 1 10"); //dummy command
-        else System.out.printf("MOVE 0 %d %d%n", closestPallet.point.x, closestPallet.point.y);
+        if (closestPallet == null) {
+            action.move(0, new Point(0, 10));
+        }
+        else {
+            action.move(0, closestPallet.point);
+        }
+        bestTurn.add(action);
     }
 }
