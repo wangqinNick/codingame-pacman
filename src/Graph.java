@@ -7,6 +7,15 @@ class Graph {
         this.nodeHashMap = new HashMap<>();
     }
 
+    public Graph(Graph prevGraph) {
+        this.nodeHashMap = new HashMap<>();
+        this.nodeHashMap.putAll(prevGraph.nodeHashMap);
+    }
+
+    public void clearDependencies() {
+        nodeHashMap.forEach((k, v) -> v.parent = null);
+    }
+
     public int size() {
         return nodeHashMap.size();
     }
@@ -34,28 +43,36 @@ class Graph {
     }
 
     public LinkedList<Point> breadthFirstSearch(int keyStart, int keyEnd) {
+        clearDependencies();
         Queue<Node> frontier = new LinkedList<>();
-        Set<Integer> explored = new HashSet<>();
+        HashSet<Integer> explored = new HashSet<>();
         LinkedList<Point> solution = new LinkedList<>();
+        HashMap<Integer, Integer> sonToParent = new HashMap<>();
 
         Node startNode = nodeHashMap.get(keyStart);
-        frontier.add(startNode);
+        assert startNode != null: "Cannot find start node";
+        frontier.offer(startNode);
+
         while (!frontier.isEmpty()) {
-            Node node = frontier.poll();  // 返回第一个元素，并在队列中删除
+            Node node = frontier.remove();  // 返回第一个元素，并在队列中删除
+            assert node != null: "All searched but sth is wrong";
             if (node.value == keyEnd) {  // Found the end
-                solution.add(node.point);
-                while (node.parent != null) {
-                    node = node.parent;
-                    solution.add(node.point);
+                Log.log("in");
+                for (int son = keyEnd; son!= keyStart; son = sonToParent.get(son)){
+                    solution.push(nodeHashMap.get(son).point);
                 }
+                solution.push(startNode.point);
                 return solution;
-            }
-            if (!explored.contains(node.value)) {  // not explored yet
+
+            } else if (!explored.contains(node.value)) {  // not explored yet
+                Log.log(String.format("Expanding Point %d %d, Value: %d", node.point.x, node.point.y, node.value));
                 explored.add(node.value);
-                LinkedList<Node> neighbours = node.neighbours;
-                for (Node childNode: neighbours) {
+                for (Node childNode: node.neighbours) {
                     childNode.parent = node;
-                    frontier.add(childNode);
+                    if (!explored.contains(childNode.value)) {
+                        sonToParent.put(childNode.value, node.value);
+                        frontier.add(childNode);
+                    }
                 }
             }
         }

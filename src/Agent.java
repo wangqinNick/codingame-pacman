@@ -1,5 +1,8 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
+
+import static java.lang.System.currentTimeMillis;
 
 class Agent {
     protected Scanner in;
@@ -27,13 +30,15 @@ class Agent {
         }
 
         state.map.read(width, height, stringMap);
+        state.createGraph();
         /* End read the map */
     }
 
     public void readTurnInfo() {
         /* Refresh the state */
         Map prevMap = this.state.map;
-        this.state = new State(prevMap);
+        Graph prevGraph = this.state.graph;
+        this.state = new State(prevMap, prevGraph);
 
         /* Read player */
         int myPlayerScore = in.nextInt();
@@ -83,17 +88,23 @@ class Agent {
         bestTurn.print(state);
     }
 
+    public void generatePath(Point pacmanPoint, Point target) {
+        int keyPacman = state.generateKey(pacmanPoint);
+        int keyTarget = state.generateKey(target);
+        Log.log(String.format("Started Searching from (%d, %d) to (%d, %d)", pacmanPoint.x, pacmanPoint.y, target.x, target.y));
+        LinkedList<Point> pathLinkedList = state.graph.breadthFirstSearch(keyPacman, keyTarget);
+        Log.log(String.format("Path Found! Length: %d", pathLinkedList.size()));
+    }
+
     public void think() {
         bestTurn.clear();
         Action action = new Action();
         Pacman myPacman = state.players[0].pacmanArrayList.get(0);
         Pallet closestPallet = state.getClosestPallet(myPacman.point);
-        if (closestPallet == null) {
-            action.move(0, new Point(0, 10));
-        }
-        else {
-            action.move(0, closestPallet.point);
-        }
+
+        action.move(0, closestPallet.point);
+        generatePath(myPacman.point, closestPallet.point);
+
         bestTurn.add(action);
     }
 }
