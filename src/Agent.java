@@ -100,16 +100,21 @@ class Agent {
 
     public void think() {
         bestTurn.clear();
-        Action action = new Action();
-        Pacman myPacman = state.players[0].pacmanArrayList.get(0);
-        Pallet closestPallet = state.getClosestPallet(myPacman.point);
+        Action action;
+        Pallet closestPallet;
+        Point nextPoint;
 
-        // action.move(0, closestPallet.point);
-        LinkedList<Point> path = generatePath(myPacman.point, closestPallet.point);
-        debugNeighbourPoints();
-        Point nextPoint = path.get(0);
-        action.move(0, nextPoint);
-        bestTurn.add(action);
+        for (Pacman pacman: state.players[0].pacmanArrayList) {
+            closestPallet = state.getClosestPallet(pacman.point);
+            LinkedList<Point> path = generatePath(pacman.point, closestPallet.point);
+
+            debugNeighbourPoints();
+            nextPoint = path.get(0);
+            Log.log(String.format("%d", pacman.pacId));
+            action = new Action();
+            action.move(pacman.pacId, nextPoint);
+            bestTurn.add(action);
+        }
     }
 
     public void debugNeighbourPoints() {

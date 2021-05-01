@@ -25,5 +25,6 @@ public class Turn {
                 action.print(state, i == num_actions-1);
             }
         }
+        System.out.println();
     }
 }

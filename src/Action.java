@@ -11,12 +11,12 @@ public class Action {
 
     public void print(State state, boolean isEnd) {
         Pacman pacman = state.players[0].pacmanArrayList.get(pacmanIndex);
+
         switch (actionType) {
             case MOVE:
-                System.out.printf("MOVE %d %d %d", pacman.pacId, destination.x, destination.y);
+                System.out.printf("MOVE %d %d %d|", pacman.pacId, destination.x, destination.y);
             default:
                 break;
         }
-        if (isEnd) System.out.println();
     }
 }
