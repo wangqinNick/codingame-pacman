@@ -1,6 +1,6 @@
 class Pacman {
     protected Point point;
-    protected int pacId;
+    protected int pacId;  // id for the pacman, the id for the player's arraylist
     protected String typeId;
     protected int speedTurnsLeft;
     protected int abilityCoolDown;

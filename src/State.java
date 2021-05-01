@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 class State {
     protected ChessPlayer [] players;
@@ -71,5 +72,19 @@ class State {
             }
         }
         return closestPallet;
+    }
+
+    public ArrayList<Point> getPacmanNextLegalPoints(int playerId, int pacmanId) {
+        /*
+        playerId: 0 for me, 1 for opponent
+         */
+        Point currentPoint = players[playerId].pacmanArrayList.get(pacmanId).point;
+        int currentKey = generateKey(currentPoint);
+        LinkedList<Node> neighbourNodes = graph.nodeHashMap.get(currentKey).neighbours;
+        ArrayList<Point> neighbourPoints = new ArrayList<>();
+        for (Node node: neighbourNodes) {
+            neighbourPoints.add(node.point);
+        }
+        return neighbourPoints;
     }
 }

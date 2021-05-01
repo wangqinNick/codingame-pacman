@@ -14,6 +14,7 @@ public class Node {
     }
 
     public void addNeighbour(Node node) {
+        if (neighbours.contains(node)) return;  // avoid duplicated neighbour adding
         this.neighbours.add(node);
     }
 }

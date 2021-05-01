@@ -49,13 +49,12 @@ class Graph {
             assert node != null: "All searched but sth is wrong";
             if (node.value == keyEnd) {  // Found the end
                 for (int son = keyEnd; son!= keyStart; son = sonToParent.get(son)){
-                    solution.push(nodeHashMap.get(son).point);
+                    solution.addFirst(nodeHashMap.get(son).point);
                 }
-                solution.push(startNode.point);
                 return solution;
 
             } else if (!explored.contains(node.value)) {  // not explored yet
-                Log.log(String.format("Expanding Point %d %d, Value: %d", node.point.x, node.point.y, node.value));
+                // Log.log(String.format("Expanding Point %d %d, Value: %d", node.point.x, node.point.y, node.value));
                 explored.add(node.value);
                 for (Node childNode: node.neighbours) {
                     childNode.parent = node;

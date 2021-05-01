@@ -92,6 +92,9 @@ class Agent {
         Log.log(String.format("Started Searching from (%d, %d) to (%d, %d)", pacmanPoint.x, pacmanPoint.y, target.x, target.y));
         LinkedList<Point> path = state.graph.breadthFirstSearch(keyPacman, keyTarget);
         Log.log(String.format("Path Found! Length: %d", path.size()));
+        for (Point point: path) {
+            Log.log(String.format("(%d %d)", point.x, point.y));
+        }
         return path;
     }
 
@@ -101,8 +104,19 @@ class Agent {
         Pacman myPacman = state.players[0].pacmanArrayList.get(0);
         Pallet closestPallet = state.getClosestPallet(myPacman.point);
 
-        action.move(0, closestPallet.point);
+        // action.move(0, closestPallet.point);
         LinkedList<Point> path = generatePath(myPacman.point, closestPallet.point);
+        debugNeighbourPoints();
+        Point nextPoint = path.get(0);
+        action.move(0, nextPoint);
         bestTurn.add(action);
+    }
+
+    public void debugNeighbourPoints() {
+        ArrayList<Point> neighbourPoints = state.getPacmanNextLegalPoints(0, 0);
+        Log.log("Neighbour Points: ");
+        for (Point point: neighbourPoints) {
+            Log.log(String.format("(%d, %d)", point.x, point.y));
+        }
     }
 }
