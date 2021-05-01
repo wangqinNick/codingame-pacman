@@ -12,4 +12,12 @@ class Pacman {
         this.speedTurnsLeft = speedTurnsLeft;
         this.abilityCoolDown = abilityCoolDown;
     }
+
+    public Pacman(Pacman pacman) {
+        this.point = new Point(pacman.point.x, pacman.point.y);
+        this.pacId = pacman.pacId;
+        this.typeId = pacman.typeId;
+        this.speedTurnsLeft = pacman.speedTurnsLeft;
+        this.abilityCoolDown = pacman.abilityCoolDown;
+    }
 }

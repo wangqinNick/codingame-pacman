@@ -8,4 +8,12 @@ public class ChessPlayer {
         this.score = score;
         this.pacmanArrayList = pacmanArrayList;
     }
+
+    public ChessPlayer(ChessPlayer player) {
+        this.score = player.score;
+        this.pacmanArrayList = new ArrayList<>();
+        for (Pacman pacman: player.pacmanArrayList) {
+            this.pacmanArrayList.add(new Pacman(pacman));
+        }
+    }
 }

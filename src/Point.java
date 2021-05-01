@@ -7,6 +7,10 @@ public class Point {
         this.y = y;
     }
 
+    public boolean equals(Point point) {
+        return this.x == point.x && this.y == point.y;
+    }
+
     public int manhattanDistance (Point p) {
         return Math.abs(x - p.x) + Math.abs(y - p.y);
     }
