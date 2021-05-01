@@ -20,7 +20,7 @@ public class Turn {
         for (int i = 0; i < actions.size(); i++) {
             Action action = actions.get(i);
             if (action == null) {
-                Log.log(String.format("size: %d", actions.size()));
+
             } else {
                 action.print(state, i == num_actions-1);
             }

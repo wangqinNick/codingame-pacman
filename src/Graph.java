@@ -33,15 +33,6 @@ class Graph {
         node2.addNeighbour(node1);
     }
 
-    public LinkedList<Node> getEdge(int key) {
-        Node node = nodeHashMap.get(key);
-        return node.neighbours;
-    }
-
-    public LinkedList<Node> getNeighbours(int key) {
-        return nodeHashMap.get(key).neighbours;
-    }
-
     public LinkedList<Point> breadthFirstSearch(int keyStart, int keyEnd) {
         clearDependencies();
         Queue<Node> frontier = new LinkedList<>();
@@ -57,7 +48,6 @@ class Graph {
             Node node = frontier.remove();  // 返回第一个元素，并在队列中删除
             assert node != null: "All searched but sth is wrong";
             if (node.value == keyEnd) {  // Found the end
-                Log.log("in");
                 for (int son = keyEnd; son!= keyStart; son = sonToParent.get(son)){
                     solution.push(nodeHashMap.get(son).point);
                 }

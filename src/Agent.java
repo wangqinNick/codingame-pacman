@@ -2,8 +2,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-import static java.lang.System.currentTimeMillis;
-
 class Agent {
     protected Scanner in;
     protected State state;
@@ -88,12 +86,13 @@ class Agent {
         bestTurn.print(state);
     }
 
-    public void generatePath(Point pacmanPoint, Point target) {
+    public LinkedList<Point> generatePath(Point pacmanPoint, Point target) {
         int keyPacman = state.generateKey(pacmanPoint);
         int keyTarget = state.generateKey(target);
         Log.log(String.format("Started Searching from (%d, %d) to (%d, %d)", pacmanPoint.x, pacmanPoint.y, target.x, target.y));
-        LinkedList<Point> pathLinkedList = state.graph.breadthFirstSearch(keyPacman, keyTarget);
-        Log.log(String.format("Path Found! Length: %d", pathLinkedList.size()));
+        LinkedList<Point> path = state.graph.breadthFirstSearch(keyPacman, keyTarget);
+        Log.log(String.format("Path Found! Length: %d", path.size()));
+        return path;
     }
 
     public void think() {
@@ -103,8 +102,7 @@ class Agent {
         Pallet closestPallet = state.getClosestPallet(myPacman.point);
 
         action.move(0, closestPallet.point);
-        generatePath(myPacman.point, closestPallet.point);
-
+        LinkedList<Point> path = generatePath(myPacman.point, closestPallet.point);
         bestTurn.add(action);
     }
 }

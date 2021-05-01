@@ -25,7 +25,6 @@ class State {
     }
 
     private void initGraph() {
-        Log.log("Start Graph Init");
         graph = new Graph();
         for (int i = 0; i < map.height; i++) {  // y
             for (int j = 0; j < map.width; j++) {  // x
@@ -34,12 +33,9 @@ class State {
                 graph.add(point, key);
             }
         }
-        Log.log("Graph Inited");
     }
 
     private void createEdges() {
-        int edges = 0;
-        Log.log("Start Graph Fullfill");
         for (int i = 0; i < map.height; i++) {  // y row
             for (int j = 0; j < map.width; j++) {  // x col
                 if (map.data[i][j] == ConstantFiled.WALL_VALUE) continue; // ignore wall
@@ -51,12 +47,9 @@ class State {
                     if (map.data[row_][col_] == ConstantFiled.WALL_VALUE) continue;  // ignore wall
                     int key2 = generateKey(new Point(col_, row_));
                     graph.addEdge(key1, key2);
-                    edges += 1;
                 }
             }
         }
-
-        Log.log(String.format("Graph Fullfilled, total %d edges", edges));
     }
 
     public void createGraph() {
