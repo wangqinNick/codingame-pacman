@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 class State {
@@ -19,6 +20,19 @@ class State {
         this.map = map;
         this.pallets = new ArrayList<>();
         this.graph = new Graph(graph);
+    }
+
+    // Constructs a new state independent to the old state
+    public State(State state) {
+        this.players = new ChessPlayer[2];
+        this.players[0] = new ChessPlayer(state.players[0]);
+        this.players[1] = new ChessPlayer(state.players[1]);
+        this.map = new Map(state.map);
+        this.pallets = new ArrayList<>();
+        for (Pallet pallet: state.pallets) {
+            this.pallets.add(new Pallet(pallet));
+        }
+        this.graph = new Graph(state.graph);  // Todo: deepcopy graph (its hashmap)
     }
 
     public int generateKey(Point point){
@@ -86,5 +100,23 @@ class State {
             neighbourPoints.add(node.point);
         }
         return neighbourPoints;
+    }
+
+    // Update the state (newState) according to the player's Pacman's new point
+    public State getNextState(State state, int playerId, int pacmanId, Point newPoint) {
+        State newState = new State(state);
+        // Update player's score
+        int valueChange = newState.map.getValue(newPoint);
+        if (valueChange != ConstantFiled.WALL_VALUE && valueChange != ConstantFiled.EMPTY_VALUE) {
+            newState.players[playerId].score += valueChange;
+            // Update the map's pallet
+            newState.map.eatPellet(newPoint);
+            // Update the palletsList
+            newState.pallets.removeIf(pallet -> pallet.point.equals(newPoint));
+        }
+        // Update player's pacman info
+        // Position
+        newState.players[playerId].pacmanArrayList.get(pacmanId).point = newPoint;
+        return newState;
     }
 }
