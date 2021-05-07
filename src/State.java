@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 class State {
@@ -7,12 +6,14 @@ class State {
     protected Map map;
     protected ArrayList<Pallet> pallets;
     protected Graph graph;
+    protected int remainScore;
 
     public State() {
         this.players = new ChessPlayer[2];
         this.map = new Map();
         this.pallets = new ArrayList<>();
         this.graph = new Graph();
+        this.remainScore = 0;
     }
 
     public State(Map map, Graph graph) {
@@ -20,6 +21,7 @@ class State {
         this.map = map;
         this.pallets = new ArrayList<>();
         this.graph = new Graph(graph);
+        this.remainScore = 0;
     }
 
     // Constructs a new state independent to the old state
@@ -33,6 +35,14 @@ class State {
             this.pallets.add(new Pallet(pallet));
         }
         this.graph = new Graph(state.graph);  // Todo: deepcopy graph (its hashmap)
+        this.remainScore = 0;
+    }
+
+    public void countRemainingScore() {
+        this.remainScore = 0;
+        for (Pallet pallet: pallets) {
+            this.remainScore += pallet.value;
+        }
     }
 
     public int generateKey(Point point){
@@ -65,6 +75,24 @@ class State {
                 }
             }
         }
+
+        // Add Left / Right edges
+        int leftKey;
+        int rightKey;
+
+        Point leftPoint;
+        Point rightPoint;
+
+        for (int i = 0; i < map.height; i++) {
+            leftPoint = new Point(0, i);
+            rightPoint = new Point(map.width-1, i);
+
+            if (!map.isWall(leftPoint) && !map.isWall(rightPoint)) {
+                leftKey = generateKey(leftPoint);
+                rightKey = generateKey(rightPoint);
+                graph.addEdge(leftKey, rightKey);
+            }
+        }
     }
 
     public void createGraph() {
@@ -92,14 +120,19 @@ class State {
         /*
         playerId: 0 for me, 1 for opponent
          */
-        Point currentPoint = players[playerId].pacmanArrayList.get(pacmanId).point;
-        int currentKey = generateKey(currentPoint);
-        LinkedList<Node> neighbourNodes = graph.nodeHashMap.get(currentKey).neighbours;
-        ArrayList<Point> neighbourPoints = new ArrayList<>();
-        for (Node node: neighbourNodes) {
-            neighbourPoints.add(node.point);
+        try {
+            Point currentPoint = players[playerId].pacmanArrayList.get(pacmanId).point;
+
+            int currentKey = generateKey(currentPoint);
+            LinkedList<Node> neighbourNodes = graph.nodeHashMap.get(currentKey).neighbours;
+            ArrayList<Point> neighbourPoints = new ArrayList<>();
+            for (Node node : neighbourNodes) {
+                neighbourPoints.add(node.point);
+            }
+            return neighbourPoints;
+        } catch (IndexOutOfBoundsException e) {
+            return null;
         }
-        return neighbourPoints;
     }
 
     // Update the state (newState) according to the player's Pacman's new point
@@ -118,5 +151,17 @@ class State {
         // Position
         newState.players[playerId].pacmanArrayList.get(pacmanId).point = newPoint;
         return newState;
+    }
+
+    public boolean isWin(int playerId) {  // playerId: 0~1
+        ChessPlayer myPlayer = players[playerId];
+        ChessPlayer opponent = players[1-playerId];
+        return myPlayer.score > remainScore + opponent.score;
+    }
+
+    public boolean isLose(int playerId) {  // playerId: 0~1
+        ChessPlayer myPlayer = players[playerId];
+        ChessPlayer opponent = players[1-playerId];
+        return myPlayer.score + remainScore < opponent.score;
     }
 }

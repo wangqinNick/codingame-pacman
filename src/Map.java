@@ -60,4 +60,12 @@ class Map {
     public void eatPellet(Point point) {
         data[point.y][point.x] = ConstantFiled.EMPTY_VALUE;
     }
+
+    public boolean isWall(Point point) {
+        return data[point.y][point.x] == ConstantFiled.WALL_VALUE;
+    }
+
+    public void updatePacmanLocation(Pacman pacman) {
+        data[pacman.point.y][pacman.point.x] = ConstantFiled.PACMAN_VALUE;
+    }
 }

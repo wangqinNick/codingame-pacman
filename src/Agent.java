@@ -51,7 +51,7 @@ class Agent {
 
             int x = in.nextInt(); // position in the grid
             int y = in.nextInt(); // position in the grid
-            String typeId = in.next(); // unused in wood leagues
+            String typeId = in.next(); // ROCK, PAPER, SCISSORS
             int speedTurnsLeft = in.nextInt(); // unused in wood leagues
             int abilityCoolDown = in.nextInt(); // unused in wood leagues
             // int x, int y, int pacId, Point point, String typeId, int speedTurnsLeft, int abilityCoolDown
@@ -80,6 +80,7 @@ class Agent {
             state.pallets.add(pallet);
         }
         /* End read pallets */
+        state.countRemainingScore();
     }
 
     public void print() {
@@ -108,17 +109,20 @@ class Agent {
             closestPallet = state.getClosestPallet(pacman.point);
             LinkedList<Point> path = generatePath(pacman.point, closestPallet.point);
 
-            debugNeighbourPoints();
+            // debugNeighbourPoints(pacman.pacId);
             nextPoint = path.get(0);
-            Log.log(String.format("%d", pacman.pacId));
+            // Log.log(String.format("%d", pacman.pacId));
             action = new Action();
             action.move(pacman.pacId, nextPoint);
             bestTurn.add(action);
         }
     }
 
-    public void debugNeighbourPoints() {
-        ArrayList<Point> neighbourPoints = state.getPacmanNextLegalPoints(0, 0);
+    public void debugNeighbourPoints(int pacId) {
+        ArrayList<Point> neighbourPoints = state.getPacmanNextLegalPoints(0, pacId);
+        if (neighbourPoints == null) {
+            return;
+        }
         Log.log("Neighbour Points: ");
         for (Point point: neighbourPoints) {
             Log.log(String.format("(%d, %d)", point.x, point.y));

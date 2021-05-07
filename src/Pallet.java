@@ -10,7 +10,7 @@ class Pallet {
     }
 
     public Pallet(Pallet pallet) {
-        this.value = pallet.value;
+        this.value = pallet.value;  // 1 or 10
         this.point = new Point(pallet.point.x, pallet.point.y);
     }
 
